@@ -24,10 +24,7 @@ class HomeTab extends StatelessWidget {
             ),
           ),
 
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              SizedBox(height: 40,),
+          SizedBox(height: 40,),
 
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -36,11 +33,9 @@ class HomeTab extends StatelessWidget {
                   height: 50.0,
                 ),
               ),
-              SearchText(),
+          SearchText(),
               //WeatherWidget(),
-              NewsWidget(),
-            ],
-          ),
+          NewsWidget(),
 
         ],
       ),

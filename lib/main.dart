@@ -13,7 +13,8 @@ void main() => runApp(GoogleSearchApp());
 class GoogleSearchApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return CupertinoApp(
+    return MaterialApp(
+      theme: ThemeData(fontFamily: 'ProductSans'),
       debugShowCheckedModeBanner: false,
       home: ChangeNotifierProvider<MockUserData>(
         builder: (_) => MockUserData(

@@ -29,7 +29,6 @@ class GoogleSearchApp extends StatelessWidget {
   }
 }
 
-
 class GoogleSearchHomeApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -37,16 +36,16 @@ class GoogleSearchHomeApp extends StatelessWidget {
       tabBar: CupertinoTabBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.home),
-            title: Text('Home'),
+            icon: Icon(Icons.home),
+            title: Text('Homes'),
           )  
           ,
           BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.collections),
+            icon: Icon(Icons.collections),
             title: Text('Collections'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.phone),
+            icon: Icon(Icons.phone),
             title: Text('Recent'),
           ),
           BottomNavigationBarItem(

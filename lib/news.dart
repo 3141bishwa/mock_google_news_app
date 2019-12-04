@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class NewsWidget extends StatefulWidget {
   @override
@@ -28,83 +28,82 @@ class _NewsWidgetState extends State<NewsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    var ratio = MediaQuery.of(context).size.width /
-        (MediaQuery.of(context).size.height / 2);
-
-    print(ratio);
     return Flexible(
       child: Container(
-        child: GridView.builder(
+        child: StaggeredGridView.countBuilder(
+          crossAxisCount: 2,
           //shrinkWrap: true,
           scrollDirection: Axis.vertical,
           itemCount: newsList.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 0.8,
-          ),
+          staggeredTileBuilder: (_) => StaggeredTile.fit(2),
           itemBuilder: (BuildContext context, int index) {
-            return Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-              child: Card(
-                clipBehavior: Clip.antiAlias,
-                margin: const EdgeInsets.only(top: 30.0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                elevation: 20.0,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Center(
-                      child: FadeInImage(
-                        placeholder:  AssetImage('assets/images/news_placeholder.png'),
-                        image: NetworkImage(newsList[index].imageUrl),
+            if(newsList[index] != null) {
+              return Padding(
+                padding:
+                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                child: Card(
+                  clipBehavior: Clip.antiAlias,
+                  margin: const EdgeInsets.only(top: 30.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  elevation: 15.0,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Center(
+                        child: FadeInImage(
+                          placeholder:  AssetImage('assets/images/news_placeholder.png'),
+                          image: NetworkImage(newsList[index].imageUrl),
+                        ),
                       ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 20.0, vertical: 10.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        textBaseline: TextBaseline.alphabetic,
-                        children: <Widget>[
-                          Text(
-                            newsList[index].headline,
-                            style: Theme.of(context).textTheme.title,
-                            textAlign: TextAlign.left,
-                          ),
-                          SizedBox(
-                            height: 20.0,
-                          ),
-                          Container(
-                            child: Text(
-                              newsList[index].description,
-                              style: Theme.of(context).textTheme.body1,
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 20.0, vertical: 10.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.baseline,
+                          textBaseline: TextBaseline.alphabetic,
+                          children: <Widget>[
+                            Text(
+                              newsList[index].headline,
+                              style: Theme.of(context).textTheme.title,
                               textAlign: TextAlign.left,
-                              //overflow: TextOverflow.ellipsis,
                             ),
-                          ),
-                          SizedBox(
-                            height: 20.0,
-                          ),
-                          Container(
-                            child: Text(
-                              newsList[index].source,
-                              style: Theme.of(context).textTheme.body1,
-                              textAlign: TextAlign.left,
-                              //overflow: TextOverflow.ellipsis,
+                            SizedBox(
+                              height: 20.0,
                             ),
-                          ),
-                        ],
+                            Container(
+                              child: Text(
+                                newsList[index].description,
+                                style: Theme.of(context).textTheme.body1,
+                                textAlign: TextAlign.left,
+                                //overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20.0,
+                            ),
+                            Container(
+                              child: Text(
+                                newsList[index].source,
+                                style: Theme.of(context).textTheme.body1,
+                                textAlign: TextAlign.left,
+                                //overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            );
+              );
+
+            } else {
+              return Text("Somethings not right");
+            }
+
           },
         ),
       ),

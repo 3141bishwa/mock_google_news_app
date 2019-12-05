@@ -10,6 +10,7 @@ class NewsWidget extends StatefulWidget {
 }
 
 class _NewsWidgetState extends State<NewsWidget> {
+
   List<News> newsList = new List();
 
   @override
@@ -18,96 +19,53 @@ class _NewsWidgetState extends State<NewsWidget> {
     this.getNews();
   }
 
-  void getNews() async {
+  Future<List> getNews() async {
     var response = await http.get(
         'https://newsapi.org/v2/top-headlines?country=us&apiKey=7c0325c05d0545168c09765c234efd43');
-    setState(() {
-      newsList = NewsList.fromList(jsonDecode(response.body)).news;
-    });
+
+    return NewsList.fromList(jsonDecode(response.body)).news;
+//    setState(() {
+//      newsList = NewsList.fromList(jsonDecode(response.body)).news;
+//    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      child: Container(
-        child: StaggeredGridView.countBuilder(
-          crossAxisCount: 2,
-          //shrinkWrap: true,
-          scrollDirection: Axis.vertical,
-          itemCount: newsList.length,
-          staggeredTileBuilder: (_) => StaggeredTile.fit(2),
-          itemBuilder: (BuildContext context, int index) {
-            if(newsList[index] != null) {
-              return Padding(
-                padding:
-                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-                child: Card(
-                  clipBehavior: Clip.antiAlias,
-                  margin: const EdgeInsets.only(top: 30.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  elevation: 15.0,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Center(
-                        child: FadeInImage(
-                          placeholder:  AssetImage('assets/images/news_placeholder.png'),
-                          image: NetworkImage(newsList[index].imageUrl),
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 20.0, vertical: 10.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.baseline,
-                          textBaseline: TextBaseline.alphabetic,
-                          children: <Widget>[
-                            Text(
-                              newsList[index].headline,
-                              style: Theme.of(context).textTheme.title,
-                              textAlign: TextAlign.left,
-                            ),
-                            SizedBox(
-                              height: 20.0,
-                            ),
-                            Container(
-                              child: Text(
-                                newsList[index].description,
-                                style: Theme.of(context).textTheme.body1,
-                                textAlign: TextAlign.left,
-                                //overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20.0,
-                            ),
-                            Container(
-                              child: Text(
-                                newsList[index].source,
-                                style: Theme.of(context).textTheme.body1,
-                                textAlign: TextAlign.left,
-                                //overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
+    final bool isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+    var shortestSide = MediaQuery.of(context).size.shortestSide;
+    final bool useMobileLayout = shortestSide < 600;
 
-            } else {
-              return Text("Somethings not right");
-            }
-
-          },
+    var padding;
+    if(!useMobileLayout) {
+      padding = 50.0;
+    } else if (isPortrait) {
+      padding = 5.0;
+    } else {
+      padding = 150.0;
+    }
+    return Expanded(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: padding),
+        child: Container(
+          child: FutureBuilder(
+            future: getNews(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.none:
+                  return Center(child: Text('Try again'),);
+                case ConnectionState.active:
+                case ConnectionState.waiting:
+                  return Center(child: CircularProgressIndicator());
+                case ConnectionState.done:
+                  if (snapshot.hasError)
+                    return Center(child: Text('Check internet connection'));
+                  return NewsGrid(news: snapshot.data);
+              } // unreachable
+            },
+          )
+          ),
         ),
-      ),
-    );
+      );
   }
 }
 
@@ -140,7 +98,6 @@ class NewsList {
   NewsList.fromList(Map<String, dynamic> jsonResponse)
       : news = List.from(jsonResponse['articles'])
             .map((news) {
-
               if(news['title'] != null && news['description'] != null && news['urlToImage'] != null && news['source']['name'] != null) {
                 print(news['urlToImage']);
                 return News.fromJson(news);
@@ -148,3 +105,106 @@ class NewsList {
             })
             .toList();
 }
+
+class NewsGrid extends StatelessWidget {
+  final List news;
+
+  NewsGrid({this.news});
+
+  @override
+  Widget build(BuildContext context) {
+
+    var shortestSide = MediaQuery.of(context).size.shortestSide;
+    final bool useMobileLayout = shortestSide < 600;
+
+    return StaggeredGridView.countBuilder(
+      crossAxisCount: useMobileLayout? 1 : 2,
+      itemCount: news.length,
+      itemBuilder: (BuildContext context, int index) {
+        return NewsCard(news: news[index]);
+      },
+      staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
+      mainAxisSpacing: 4.0,
+      crossAxisSpacing: 4.0,
+    );
+  }
+}
+
+
+class NewsCard extends StatelessWidget {
+  final news;
+
+  NewsCard({this.news});
+
+  @override
+  Widget build(BuildContext context) {
+    if(news == null) {
+      return Text("Something wrong");
+    } else {
+      return Padding(
+        padding:
+        const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+        child: Card(
+          clipBehavior: Clip.antiAlias,
+          margin: const EdgeInsets.only(top: 30.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          elevation: 2.0,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Center(
+                child: FadeInImage(
+                  placeholder:  AssetImage('assets/images/news_placeholder.png'),
+                  image: NetworkImage(news.imageUrl),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(
+                    horizontal: 20.0, vertical: 10.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: <Widget>[
+                    Text(
+                      news.headline,
+                      style: Theme.of(context).textTheme.title,
+                      textAlign: TextAlign.left,
+                    ),
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                    Container(
+                      child: Text(
+                        news.description,
+                        style: Theme.of(context).textTheme.body1,
+                        textAlign: TextAlign.left,
+//overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                    Container(
+                      child: Text(
+                        news.source,
+                        style: Theme.of(context).textTheme.body1,
+                        textAlign: TextAlign.left,
+//overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+    ;
+  }
+  }
+
+

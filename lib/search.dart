@@ -22,7 +22,7 @@ class _SearchTextState extends State<SearchText> {
 
     return Material(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 60.0, vertical: 20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 200.0, vertical: 20.0),
         child: TextField(
           controller: _textController,
           decoration: InputDecoration(

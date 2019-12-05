@@ -37,7 +37,7 @@ class GoogleSearchHomeApp extends StatelessWidget {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            title: Text('Homes'),
+            title: Text('Home'),
           )  
           ,
           BottomNavigationBarItem(

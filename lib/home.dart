@@ -10,34 +10,38 @@ class HomeTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                CircleAvatar(
-                  backgroundImage: NetworkImage(Provider.of<MockUserData>(context).imageUrl),
-                )
-              ],
-            ),
-          ),
-
-          SizedBox(height: 40,),
-
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Image.asset(
-                  'assets/images/png_logo.png',
-                  height: 50.0,
-                ),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(Provider.of<MockUserData>(context).imageUrl),
+                  )
+                ],
               ),
-          SearchText(),
-              //WeatherWidget(),
-          NewsWidget(),
+            ),
 
-        ],
+            SizedBox(height: 40,),
+
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.asset(
+                    'assets/images/png_logo.png',
+                    height: 50.0,
+                  ),
+                ),
+            SearchText(),
+                //WeatherWidget(),
+            //SearchText(),SearchText(),SearchText(),SearchText(),SearchText(),SearchText(),SearchText(),SearchText(),SearchText(),SearchText(),SearchText(),SearchText(),SearchText(),SearchText(),SearchText(),SearchText(),SearchText(),SearchText(),
+            NewsWidget(),
+
+          ],
+        ),
       ),
     );
   }

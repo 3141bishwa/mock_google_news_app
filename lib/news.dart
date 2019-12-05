@@ -43,6 +43,7 @@ class _NewsWidgetState extends State<NewsWidget> {
       padding = 150.0;
     }
     return Flexible(
+      fit: FlexFit.loose,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: padding),
         child: Container(
@@ -120,6 +121,7 @@ class NewsGrid extends StatelessWidget {
     final bool useMobileLayout = shortestSide < 600;
 
     return StaggeredGridView.countBuilder(
+      shrinkWrap: true,
       crossAxisCount: useMobileLayout? 1 : 2,
       itemCount: news.length,
       itemBuilder: (BuildContext context, int index) {

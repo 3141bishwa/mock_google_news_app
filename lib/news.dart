@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:google_app_ios_layout/news_page.dart';
 
 class NewsWidget extends StatefulWidget {
   @override
@@ -41,7 +42,7 @@ class _NewsWidgetState extends State<NewsWidget> {
     } else {
       padding = 150.0;
     }
-    return Expanded(
+    return Flexible(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: padding),
         child: Container(
@@ -72,20 +73,23 @@ class News {
   final String imageUrl;
   final String description;
   final String source;
+  final String webPageUrl;
 
   News(
       {Key key,
         @required this.headline,
         @required this.description,
         @required this.imageUrl,
-        @required this.source
+        @required this.source,
+        @required this.webPageUrl
       });
 
   News.fromJson(Map<String, dynamic> newsJson)
       : headline = newsJson['title'],
         description = newsJson['description'],
         imageUrl = newsJson['urlToImage'],
-        source = newsJson['source']['name'];
+        source = newsJson['source']['name'],
+        webPageUrl = newsJson['url'];
 }
 
 class NewsList {
@@ -134,11 +138,24 @@ class NewsCard extends StatelessWidget {
 
   NewsCard({this.news});
 
+  void _navigateToWebPage(BuildContext context) {
+    if (Navigator.of(context).canPop()) {
+      Navigator.of(context).pop();
+    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => NewsPage(webUrl: news.webPageUrl,)),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     if(news == null) {
       return Text("Something wrong");
     } else {
+
+      var webUrlfront = news.webPageUrl.split("/")[2];
+
       return Padding(
         padding:
         const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
@@ -149,55 +166,85 @@ class NewsCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(10.0),
           ),
           elevation: 2.0,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Stack(
+            alignment: AlignmentDirectional.bottomCenter,
             children: <Widget>[
-              Center(
-                child: FadeInImage(
-                  placeholder:  AssetImage('assets/images/news_placeholder.png'),
-                  image: NetworkImage(news.imageUrl),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(
-                    horizontal: 20.0, vertical: 10.0),
+              InkWell(
+                onTap: () {
+                  _navigateToWebPage(context);
+                },
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                  textBaseline: TextBaseline.alphabetic,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(
-                      news.headline,
-                      style: Theme.of(context).textTheme.title,
-                      textAlign: TextAlign.left,
-                    ),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    Container(
-                      child: Text(
-                        news.description,
-                        style: Theme.of(context).textTheme.body1,
-                        textAlign: TextAlign.left,
-//overflow: TextOverflow.ellipsis,
+                    Center(
+                      child: FadeInImage(
+                        placeholder:  AssetImage('assets/images/news_placeholder.png'),
+                        image: NetworkImage(news.imageUrl),
                       ),
                     ),
-                    SizedBox(
-                      height: 20.0,
-                    ),
                     Container(
-                      child: Text(
-                        news.source,
-                        style: Theme.of(context).textTheme.body1,
-                        textAlign: TextAlign.left,
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 20.0, vertical: 10.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
+                        children: <Widget>[
+                          Text(
+                            news.headline,
+                            style: Theme.of(context).textTheme.title,
+                            textAlign: TextAlign.left,
+                          ),
+                          SizedBox(
+                            height: 20.0,
+                          ),
+                          Container(
+                            child: Text(
+                              news.description,
+                              style: Theme.of(context).textTheme.body1,
+                              textAlign: TextAlign.left,
 //overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 50.0,
+                          ),
+
+                        ],
                       ),
                     ),
                   ],
                 ),
               ),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Container(
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+
+                    leading: Image.network(
+                      'https://logo.clearbit.com/$webUrlfront',
+                      height: 20.0,
+
+                    ),
+                    title: Text(
+                      news.source,
+                      style: Theme.of(context).textTheme.body1,
+                      textAlign: TextAlign.left,
+//overflow: TextOverflow.ellipsis,
+                    ),
+                    trailing: InkWell(
+                      onTap: () {print("Tapped");},
+                      child: Icon(Icons.more_vert),
+                    ),
+
+                  ),
+                ),
+              ),
+
             ],
-          ),
+          )
         ),
       );
     }

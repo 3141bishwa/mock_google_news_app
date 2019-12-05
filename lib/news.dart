@@ -11,12 +11,12 @@ class NewsWidget extends StatefulWidget {
 
 class _NewsWidgetState extends State<NewsWidget> {
 
-  List<News> newsList = new List();
+  Future<List> newsList;
 
   @override
   void initState() {
     super.initState();
-    this.getNews();
+    newsList = this.getNews();
   }
 
   Future<List> getNews() async {
@@ -24,10 +24,8 @@ class _NewsWidgetState extends State<NewsWidget> {
         'https://newsapi.org/v2/top-headlines?country=us&apiKey=7c0325c05d0545168c09765c234efd43');
 
     return NewsList.fromList(jsonDecode(response.body)).news;
-//    setState(() {
-//      newsList = NewsList.fromList(jsonDecode(response.body)).news;
-//    });
-  }
+    }
+
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +46,7 @@ class _NewsWidgetState extends State<NewsWidget> {
         padding: EdgeInsets.symmetric(horizontal: padding),
         child: Container(
           child: FutureBuilder(
-            future: getNews(),
+            future: newsList,
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.none:

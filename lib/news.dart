@@ -118,6 +118,7 @@ class NewsGrid extends StatelessWidget {
     final bool useMobileLayout = shortestSide < 600;
 
     return StaggeredGridView.countBuilder(
+      key: PageStorageKey('News'),
       physics: const BouncingScrollPhysics(),
       shrinkWrap: true,
       crossAxisCount: useMobileLayout ? 1 : 2,
@@ -194,7 +195,9 @@ class NewsCard extends StatelessWidget {
                           children: <Widget>[
                             Text(
                               news.headline,
-                              style: Theme.of(context).textTheme.title,
+                              style: TextStyle(
+                                fontSize: 22,
+                              ),
                               textAlign: TextAlign.left,
                             ),
                             SizedBox(
@@ -203,10 +206,13 @@ class NewsCard extends StatelessWidget {
                             Container(
                               child: Text(
                                 news.description,
-                                style: Theme.of(context).textTheme.body1,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                ),
                                 textAlign: TextAlign.left,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 3,
+
                               ),
                             ),
                             SizedBox(

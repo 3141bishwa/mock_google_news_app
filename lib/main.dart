@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:google_app_ios_layout/home.dart';
 import 'package:google_app_ios_layout/collections.dart';
 import 'package:google_app_ios_layout/more.dart';
 import 'package:google_app_ios_layout/recent.dart';
 import 'package:google_app_ios_layout/model/mockdata.dart';
-
 import 'package:provider/provider.dart';
 
 void main() => runApp(GoogleSearchApp());
@@ -14,7 +12,10 @@ class GoogleSearchApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(fontFamily: 'ProductSans'),
+      theme: ThemeData(
+          fontFamily: 'ProductSans',
+
+      ),
       debugShowCheckedModeBanner: false,
       home: ChangeNotifierProvider<MockUserData>(
         builder: (_) => MockUserData(
@@ -22,17 +23,68 @@ class GoogleSearchApp extends StatelessWidget {
             email: 'youaremyqueen@westeros.com',
             imageUrl:
                 'https://i0.wp.com/metro.co.uk/wp-content/uploads/2019/04/SEI_601281802.jpg?quality=90&strip=all&zoom=1&resize=644%2C428&ssl=1'),
-        child: GoogleSearchHomeApp(),
+        child: HooliSearchHomeApp(),
       ),
     );
   }
 }
 
-class GoogleSearchHomeApp extends StatelessWidget {
+
+class HooliSearchHomeApp extends StatefulWidget {
   @override
+  _HooliSearchHomeAppState createState() => _HooliSearchHomeAppState();
+}
+
+class _HooliSearchHomeAppState extends State<HooliSearchHomeApp> with SingleTickerProviderStateMixin {
+  @override
+
+  int _currentIndex = 0;
+  TabController _tabController;
+
+  final List<Widget> _tabs = [
+    HomeTab(),
+    CollectionsTab(),
+    RecentTab(),
+    MoreTab(),
+  ];
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(vsync: this, length: _tabs.length);
+
+  }
+  void onTabTapped(int index) {
+
+    if(index == 0) {
+      print("Home Tab tapped");
+    }
+    setState(() {
+      _currentIndex = index;
+    });
+
+    _tabController.animateTo(_currentIndex);
+  }
+
   Widget build(BuildContext context) {
-    return CupertinoTabScaffold(
-      tabBar: CupertinoTabBar(
+    return Scaffold(
+      body: TabBarView(
+        controller: _tabController,
+        children: _tabs,
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: Colors.blue[900],
+        unselectedItemColor: Colors.black87,
+        onTap: onTabTapped,
+        showUnselectedLabels: true,
+        currentIndex: _currentIndex,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -52,39 +104,7 @@ class GoogleSearchHomeApp extends StatelessWidget {
           ),
         ],
       ),
-      tabBuilder: (context, index) {
-        switch (index) {
-          case 0:
-            return CupertinoTabView(
-              builder: (context) {
-                return CupertinoPageScaffold(
-                  child: HomeTab(),
-                );
-              },
-            );
 
-          case 1:
-            return CupertinoTabView(
-              builder: (context) {
-                return CupertinoPageScaffold(child: CollectionsTab());
-              },
-            );
-
-          case 2:
-            return CupertinoTabView(
-              builder: (context) {
-                return CupertinoPageScaffold(child: RecentTab());
-              },
-            );
-
-          case 3:
-            return CupertinoTabView(
-              builder: (context) {
-                return CupertinoPageScaffold(child: MoreTab());
-              },
-            );
-        }
-      },
     );
   }
 }

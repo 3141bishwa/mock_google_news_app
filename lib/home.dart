@@ -5,11 +5,32 @@ import 'package:google_app_ios_layout/search.dart';
 import 'package:google_app_ios_layout/weather.dart';
 import 'package:google_app_ios_layout/news.dart';
 
-class HomeTab extends StatelessWidget {
+class HomeTab extends StatefulWidget {
+  @override
+  _HomeTabState createState() => _HomeTabState();
+}
+
+class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin{
+
+  @override
+  bool get wantKeepAlive => true;
+
+  final ScrollController _homeController = ScrollController();
+
+  void getToTop() {
+    _homeController.animateTo(
+      0.0,
+      curve: Curves.easeOut,
+      duration: const Duration(milliseconds: 300),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: PageStorageKey("Home"),
       body: CustomScrollView(
+          controller: _homeController,
           //physics: AlwaysScrollableScrollPhysics(),
           slivers: <Widget>[
             SliverToBoxAdapter(

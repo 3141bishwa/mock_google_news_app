@@ -18,12 +18,11 @@ class GoogleSearchApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: ChangeNotifierProvider<MockUserData>(
         builder: (_) => MockUserData(
-          name: 'Jon Snow', 
-          email: 'youaremyqueen@westeros.com',
-          imageUrl: 'https://i0.wp.com/metro.co.uk/wp-content/uploads/2019/04/SEI_601281802.jpg?quality=90&strip=all&zoom=1&resize=644%2C428&ssl=1'
-        ),
+            name: 'Jon Snow',
+            email: 'youaremyqueen@westeros.com',
+            imageUrl:
+                'https://i0.wp.com/metro.co.uk/wp-content/uploads/2019/04/SEI_601281802.jpg?quality=90&strip=all&zoom=1&resize=644%2C428&ssl=1'),
         child: GoogleSearchHomeApp(),
-      
       ),
     );
   }
@@ -38,8 +37,7 @@ class GoogleSearchHomeApp extends StatelessWidget {
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             title: Text('Home'),
-          )  
-          ,
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.collections),
             title: Text('Collections'),
@@ -54,49 +52,39 @@ class GoogleSearchHomeApp extends StatelessWidget {
           ),
         ],
       ),
-
-
       tabBuilder: (context, index) {
-
         switch (index) {
           case 0:
-            return CupertinoTabView(builder: (context) {
-              return CupertinoPageScaffold(
-                child: HomeTab(),
-              );
-            },
-
+            return CupertinoTabView(
+              builder: (context) {
+                return CupertinoPageScaffold(
+                  child: HomeTab(),
+                );
+              },
             );
 
           case 1:
-            return CupertinoTabView(builder: (context) {
-              return CupertinoPageScaffold(
-                child: CollectionsTab()
-              );
-            },
-
+            return CupertinoTabView(
+              builder: (context) {
+                return CupertinoPageScaffold(child: CollectionsTab());
+              },
             );
-          
-          case 2:
-            return CupertinoTabView(builder: (context) {
-              return CupertinoPageScaffold(
-                child: RecentTab()
-              );
-            },
 
+          case 2:
+            return CupertinoTabView(
+              builder: (context) {
+                return CupertinoPageScaffold(child: RecentTab());
+              },
             );
 
           case 3:
-            return CupertinoTabView(builder: (context) {
-              return CupertinoPageScaffold(
-                child: MoreTab()
-              );
-            },
-
+            return CupertinoTabView(
+              builder: (context) {
+                return CupertinoPageScaffold(child: MoreTab());
+              },
             );
         }
       },
     );
   }
 }
-

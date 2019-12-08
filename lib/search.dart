@@ -24,6 +24,7 @@ class _SearchTextState extends State<SearchText> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 200.0, vertical: 20.0),
         child: TextField(
+          onSubmitted: (text) {print(text);},
           controller: _textController,
           decoration: InputDecoration(
               hintText: 'Search anything',

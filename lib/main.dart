@@ -8,6 +8,9 @@ import 'package:provider/provider.dart';
 
 void main() => runApp(GoogleSearchApp());
 
+
+GlobalKey<HomeTabState> globalKey = GlobalKey();
+
 class GoogleSearchApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -36,13 +39,12 @@ class HooliSearchHomeApp extends StatefulWidget {
 }
 
 class _HooliSearchHomeAppState extends State<HooliSearchHomeApp> with SingleTickerProviderStateMixin {
-  @override
-
   int _currentIndex = 0;
+
   TabController _tabController;
 
   final List<Widget> _tabs = [
-    HomeTab(),
+    HomeTab(key: globalKey),
     CollectionsTab(),
     RecentTab(),
     MoreTab(),
@@ -61,9 +63,11 @@ class _HooliSearchHomeAppState extends State<HooliSearchHomeApp> with SingleTick
 
   }
   void onTabTapped(int index) {
+    print("$index and $_currentIndex");
 
-    if(index == 0) {
-      print("Home Tab tapped");
+    //
+    if(_currentIndex == 0 && index == 0) {
+      globalKey.currentState.getToTop();
     }
     setState(() {
       _currentIndex = index;

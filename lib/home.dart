@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:google_app_ios_layout/model/mockdata.dart';
+import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:google_app_ios_layout/search.dart';
 import 'package:google_app_ios_layout/weather.dart';
 import 'package:google_app_ios_layout/news.dart';
 
 class HomeTab extends StatefulWidget {
+
+  HomeTab({Key key}) : super(key: key);
+
   @override
-  _HomeTabState createState() => _HomeTabState();
+  HomeTabState createState() => HomeTabState();
 }
 
-class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin{
+class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin{
 
   @override
   bool get wantKeepAlive => true;

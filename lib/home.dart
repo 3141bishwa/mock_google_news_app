@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_app_ios_layout/model/mockdata.dart';
-import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:google_app_ios_layout/search.dart';
-import 'package:google_app_ios_layout/weather.dart';
 import 'package:google_app_ios_layout/news.dart';
 
 class HomeTab extends StatefulWidget {

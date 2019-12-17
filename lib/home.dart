@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_app_ios_layout/model/mockdata.dart';
-import 'package:google_app_ios_layout/news.dart';
+import 'package:google_app_ios_layout/news_results.dart';
 import 'package:provider/provider.dart';
 
 class HomeTab extends StatefulWidget {

@@ -14,9 +14,7 @@ class GoogleSearchApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        fontFamily: 'ProductSans',
-      ),
+      theme: ThemeData(),
       debugShowCheckedModeBanner: false,
       home: ChangeNotifierProvider<MockUserData>(
         builder: (_) => MockUserData(

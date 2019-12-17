@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:google_app_ios_layout/home.dart';
 import 'package:google_app_ios_layout/collections.dart';
+import 'package:google_app_ios_layout/home.dart';
+import 'package:google_app_ios_layout/model/mockdata.dart';
 import 'package:google_app_ios_layout/more.dart';
 import 'package:google_app_ios_layout/recent.dart';
-import 'package:google_app_ios_layout/model/mockdata.dart';
 import 'package:provider/provider.dart';
 
 void main() => runApp(GoogleSearchApp());
-
 
 GlobalKey<HomeTabState> globalKey = GlobalKey();
 
@@ -16,8 +15,7 @@ class GoogleSearchApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-          fontFamily: 'ProductSans',
-
+        fontFamily: 'ProductSans',
       ),
       debugShowCheckedModeBanner: false,
       home: ChangeNotifierProvider<MockUserData>(
@@ -32,13 +30,13 @@ class GoogleSearchApp extends StatelessWidget {
   }
 }
 
-
 class HooliSearchHomeApp extends StatefulWidget {
   @override
   _HooliSearchHomeAppState createState() => _HooliSearchHomeAppState();
 }
 
-class _HooliSearchHomeAppState extends State<HooliSearchHomeApp> with SingleTickerProviderStateMixin {
+class _HooliSearchHomeAppState extends State<HooliSearchHomeApp>
+    with SingleTickerProviderStateMixin {
   int _currentIndex = 0;
 
   TabController _tabController;
@@ -60,13 +58,13 @@ class _HooliSearchHomeAppState extends State<HooliSearchHomeApp> with SingleTick
   void initState() {
     super.initState();
     _tabController = TabController(vsync: this, length: _tabs.length);
-
   }
+
   void onTabTapped(int index) {
     print("$index and $_currentIndex");
 
     //
-    if(_currentIndex == 0 && index == 0) {
+    if (_currentIndex == 0 && index == 0) {
       globalKey.currentState.getToTop();
     }
     setState(() {
@@ -79,6 +77,7 @@ class _HooliSearchHomeAppState extends State<HooliSearchHomeApp> with SingleTick
   Widget build(BuildContext context) {
     return Scaffold(
       body: TabBarView(
+        physics: NeverScrollableScrollPhysics(),
         controller: _tabController,
         children: _tabs,
       ),
@@ -108,7 +107,6 @@ class _HooliSearchHomeAppState extends State<HooliSearchHomeApp> with SingleTick
           ),
         ],
       ),
-
     );
   }
 }

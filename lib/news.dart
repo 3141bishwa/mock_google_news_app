@@ -1,10 +1,11 @@
 import 'dart:convert';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_app_ios_layout/news_page.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:http/http.dart' as http;
 
 class NewsWidget extends StatefulWidget {
   @override
@@ -13,16 +14,23 @@ class NewsWidget extends StatefulWidget {
 
 class _NewsWidgetState extends State<NewsWidget> {
   Future<List> newsList;
+  TextEditingController _textController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    newsList = this.getNews();
+    newsList = this.getNews("");
   }
 
-  Future<List> getNews() async {
+  Future<List> getNews(String news) async {
+    var api_type;
+    if (news == "") {
+      api_type = "top-headlines?country=us";
+    } else {
+      api_type = "everything?q=$news";
+    }
     var response = await http.get(
-        'https://newsapi.org/v2/top-headlines?country=us&apiKey=7c0325c05d0545168c09765c234efd43');
+        'https://newsapi.org/v2/$api_type&apiKey=7c0325c05d0545168c09765c234efd43');
 
     return NewsList.fromList(jsonDecode(response.body)).news;
   }
@@ -44,26 +52,47 @@ class _NewsWidgetState extends State<NewsWidget> {
     }
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: padding),
-      child: FutureBuilder(
-        future: newsList,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-              return Center(
-                child: Text('Try again'),
-              );
-            case ConnectionState.active:
-            case ConnectionState.waiting:
-              return Center(child: CircularProgressIndicator());
-            case ConnectionState.done:
-              if (snapshot.hasError)
+      child: Column(children: [
+        Material(
+            child: Padding(
+          padding:
+              const EdgeInsets.symmetric(horizontal: 200.0, vertical: 20.0),
+          child: TextField(
+            onSubmitted: (text) {
+              setState(() {
+                newsList = getNews(text);
+              });
+            },
+            controller: _textController,
+            decoration: InputDecoration(
+                hintText: 'Search anything',
+                contentPadding: const EdgeInsets.all(15.0),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                )),
+          ),
+        )),
+        FutureBuilder(
+          future: newsList,
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.none:
                 return Center(
                   child: Text('Try again'),
                 );
-              return NewsGrid(news: snapshot.data);
-          } // unreachable
-        },
-      ),
+              case ConnectionState.active:
+              case ConnectionState.waiting:
+                return Center(child: CircularProgressIndicator());
+              case ConnectionState.done:
+                if (snapshot.hasError)
+                  return Center(
+                    child: Text('Try again'),
+                  );
+                return NewsGrid(news: snapshot.data);
+            } // unreachable
+          },
+        ),
+      ]),
     );
   }
 }
@@ -212,7 +241,6 @@ class NewsCard extends StatelessWidget {
                                 textAlign: TextAlign.left,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 3,
-
                               ),
                             ),
                             SizedBox(

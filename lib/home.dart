@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_app_ios_layout/model/mockdata.dart';
-import 'package:provider/provider.dart';
-import 'package:google_app_ios_layout/search.dart';
 import 'package:google_app_ios_layout/news.dart';
+import 'package:provider/provider.dart';
 
 class HomeTab extends StatefulWidget {
-
   HomeTab({Key key}) : super(key: key);
 
   @override
   HomeTabState createState() => HomeTabState();
 }
 
-class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin{
-
+class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -31,8 +28,7 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin{
   Widget build(BuildContext context) {
     return Scaffold(
       key: PageStorageKey("Home"),
-      body: CustomScrollView(
-          controller: _homeController,
+      body: CustomScrollView(controller: _homeController,
           //physics: AlwaysScrollableScrollPhysics(),
           slivers: <Widget>[
             SliverToBoxAdapter(
@@ -63,7 +59,6 @@ class HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin{
                       height: 50.0,
                     ),
                   ),
-                  SearchText(),
                   //WeatherWidget(),
                 ],
               ),

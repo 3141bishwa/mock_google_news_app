@@ -188,20 +188,19 @@ class NewsCard extends StatelessWidget {
                             Text(
                               news.headline,
                               style: TextStyle(
-                                fontSize: 22,
+                                fontSize: 20,
                                 fontFamily: 'ProductSans',
                               ),
                               textAlign: TextAlign.left,
                             ),
                             SizedBox(
-                              height: 20.0,
+                              height: 10.0,
                             ),
                             Container(
                               child: Text(
                                 news.description,
                                 style: TextStyle(
-                                  fontSize: 18,
-                                ),
+                                    fontSize: 16, color: Colors.black54),
                                 textAlign: TextAlign.left,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 3,
@@ -225,7 +224,6 @@ class NewsCard extends StatelessWidget {
             )),
       );
     }
-    ;
   }
 }
 
@@ -277,7 +275,7 @@ class NewsSourceInfo extends StatelessWidget {
           ),
           title: RichText(
             text: TextSpan(
-                style: Theme.of(context).textTheme.body1,
+                style: TextStyle(fontSize: 12, color: Colors.black54),
                 children: <TextSpan>[
                   TextSpan(text: newsSource),
                   TextSpan(text: " · "),

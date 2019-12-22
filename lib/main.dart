@@ -1,3 +1,4 @@
+import 'package:flare_splash_screen/flare_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_app_ios_layout/collections.dart';
 import 'package:google_app_ios_layout/home.dart';
@@ -16,13 +17,18 @@ class GoogleSearchApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(),
       debugShowCheckedModeBanner: false,
-      home: ChangeNotifierProvider<MockUserData>(
-        builder: (_) => MockUserData(
-            name: 'Jon Snow',
-            email: 'youaremyqueen@westeros.com',
-            imageUrl:
-                'https://i0.wp.com/metro.co.uk/wp-content/uploads/2019/04/SEI_601281802.jpg?quality=90&strip=all&zoom=1&resize=644%2C428&ssl=1'),
-        child: HooliSearchHomeApp(),
+      home: SplashScreen(
+        'assets/animations/logo_animation.flr',
+        ChangeNotifierProvider<MockUserData>(
+          builder: (_) => MockUserData(
+              name: 'Jon Snow',
+              email: 'youaremyqueen@westeros.com',
+              imageUrl:
+                  'https://i0.wp.com/metro.co.uk/wp-content/uploads/2019/04/SEI_601281802.jpg?quality=90&strip=all&zoom=1&resize=644%2C428&ssl=1'),
+          child: HooliSearchHomeApp(),
+        ),
+        startAnimation: 'animate',
+        backgroundColor: Colors.white,
       ),
     );
   }

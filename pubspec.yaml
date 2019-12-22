@@ -29,10 +29,20 @@ dependencies:
   cached_network_image: ^2.0.0-rc
   flutter_staggered_grid_view: ^0.3.0
   webview_flutter: ^0.3.17
+  flare_flutter: ^1.8.3
+  flare_splash_screen: ^2.0.1+2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  flutter_launcher_icons: "^0.7.3"
+
+flutter_icons:
+  ios: true
+  android: true
+  image_path: 'assets/images/logo_icon_transparent.png'
+
 
 
 # For information on the generic Dart part of this file, see the
@@ -50,6 +60,7 @@ flutter:
     - assets/images/hooli_logo.svg
     - assets/images/png_logo.png
     - assets/images/news_placeholder.png
+    - assets/animations/logo_animation.flr
   # To add assets to your application, add an assets section, like this:
   # assets:
   #  - images/a_dot_burr.jpeg

@@ -58,23 +58,30 @@ class _NewsWidgetState extends State<NewsWidget> {
     } else {
       padding = 150.0;
     }
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: padding),
-      child: Column(children: [
-        Padding(
-          padding:
-              const EdgeInsets.symmetric(horizontal: 200.0, vertical: 20.0),
-          child: CupertinoTextField(
-            onSubmitted: (text) {
-              setState(() {
-                newsList = getNews(text);
-              });
-            },
-            controller: _textController,
-            clearButtonMode: OverlayVisibilityMode.editing,
+    return Column(children: [
+      SizedBox(height: 20.0),
+      Padding(
+        padding: EdgeInsets.symmetric(horizontal: padding + 30.0),
+        child: CupertinoTextField(
+          decoration: BoxDecoration(
+            border: Border.all(
+              width: 0.0,
+              color: CupertinoColors.inactiveGray,
+            ),
+            borderRadius: BorderRadius.circular(15.0),
           ),
+          onSubmitted: (text) {
+            setState(() {
+              newsList = getNews(text);
+            });
+          },
+          controller: _textController,
+          clearButtonMode: OverlayVisibilityMode.editing,
         ),
-        FutureBuilder(
+      ),
+      Padding(
+        padding: EdgeInsets.symmetric(horizontal: padding),
+        child: FutureBuilder(
           future: newsList,
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             switch (snapshot.connectionState) {
@@ -94,8 +101,8 @@ class _NewsWidgetState extends State<NewsWidget> {
             } // unreachable
           },
         ),
-      ]),
-    );
+      ),
+    ]);
   }
 }
 

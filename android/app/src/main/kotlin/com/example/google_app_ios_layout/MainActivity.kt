@@ -1,4 +1,4 @@
-package com.example.google_app_ios_layout
+package me.bsilwal.hooli.news
 
 import android.os.Bundle
 
